@@ -1,0 +1,2 @@
+import type { MetadataRoute } from "next"; import { getProjects } from "@/content/site"; import { siteUrl } from "@/lib/i18n";
+export default function sitemap():MetadataRoute.Sitemap{const base=siteUrl();const routes=["","/projects","/services","/about","/start","/privacy"];return ["pt","en"].flatMap(locale=>[...routes.map(route=>({url:`${base}/${locale}${route}`,lastModified:new Date()})),...getProjects().map(project=>({url:`${base}/${locale}/projects/${project.slug}`,lastModified:new Date()}))]);}

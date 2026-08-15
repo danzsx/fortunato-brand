@@ -1,0 +1,1 @@
+import Link from "next/link"; export default function NotFound(){return <main className="container page-head"><h1>Página não encontrada.</h1><Link className="link" href="/pt">Voltar ao início →</Link></main>}
