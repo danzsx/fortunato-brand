@@ -4,7 +4,7 @@ const text = (max: number) => z.string().trim().max(max);
 
 export const briefingSchema = z.object({
   locale: z.enum(["pt-BR", "en"]),
-  honeypot: z.string().max(0).optional(),
+  honeypot: z.string().optional(),
   personal: z.object({
     name: text(100).min(1, "Informe seu nome."),
     role: z.enum(["owner", "partner", "marketing", "other"]).optional(),
