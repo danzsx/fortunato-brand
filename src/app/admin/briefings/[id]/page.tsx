@@ -27,10 +27,42 @@ function print(value: unknown): string {
 
 function ExtraFields({ raw }: { raw: unknown }) {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
-  const structured = new Set(Object.keys(labels));
-  const extras = Object.entries(raw as Record<string, unknown>).filter(([key, value]) => !structured.has(key) && value !== "" && value !== undefined);
-  if (!extras.length) return null;
-  return <section className="admin-detail-section"><h2>Informações complementares</h2><dl>{extras.map(([key, value]) => <div key={key}><dt>{key.replace(/([A-Z])/g, " $1")}</dt><dd>{typeof value === "object" ? <pre>{JSON.stringify(value, null, 2)}</pre> : print(value)}</dd></div>)}</dl></section>;
+  const r = raw as Record<string, Record<string, unknown>>;
+  const proj = r.project || {};
+  const biz = r.business || {};
+  const contact = r.contact || {};
+  const spectrum = proj.brandSpectrum as Record<string, number> | undefined;
+
+  const discoveryItems: [string, string][] = [
+    ["Público & Percepção", print(proj.targetAudience)],
+    ["Entregáveis Desejados", print(proj.deliverables)],
+    ["Territórios Estéticos", print(proj.aestheticTerritories)],
+    [
+      "Espectro de Personalidade",
+      spectrum
+        ? `Clássico↔Contemporâneo: ${spectrum.classicModern ?? 50}% · Silencioso↔Expressivo: ${spectrum.minimalExpressive ?? 35}% · Acolhedor↔Exclusivo: ${spectrum.warmExclusive ?? 60}% · Orgânico↔Técnico: ${spectrum.organicTechnical ?? 50}%`
+        : "—",
+    ],
+    ["O que evitar", print(proj.avoidElements)],
+    ["Notas livres / Ideias", print(proj.freeNotes)],
+    ["Presença atual", print(biz.presence)],
+    ["Origem do contato", print(contact.source)],
+  ].filter(([, val]) => val !== "—");
+
+  if (!discoveryItems.length) return null;
+  return (
+    <section className="admin-detail-section">
+      <h2>Descoberta Estratégica & Direção Visual</h2>
+      <dl>
+        {discoveryItems.map(([labelText, val]) => (
+          <div key={labelText}>
+            <dt>{labelText}</dt>
+            <dd>{val}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
 }
 
 export default async function BriefingDetailPage({ params }: { params: Promise<{ id: string }> }) {

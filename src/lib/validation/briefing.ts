@@ -29,6 +29,19 @@ export const briefingSchema = z.object({
     motivation: text(1500).min(1, "Conte brevemente o que motivou o projeto."),
     desiredChange: text(1500).optional(),
     references: text(1500).optional(),
+    targetAudience: text(1000).optional(),
+    deliverables: z.array(text(80)).max(12).optional(),
+    aestheticTerritories: z.array(text(80)).max(6).optional(),
+    brandSpectrum: z
+      .object({
+        classicModern: z.number().min(0).max(100).optional(),
+        minimalExpressive: z.number().min(0).max(100).optional(),
+        warmExclusive: z.number().min(0).max(100).optional(),
+        organicTechnical: z.number().min(0).max(100).optional(),
+      })
+      .optional(),
+    avoidElements: text(1000).optional(),
+    freeNotes: text(2000).optional(),
   }),
   planning: z.object({
     timeline: z.enum([
@@ -96,7 +109,23 @@ export function emptyDraft(locale: "pt-BR" | "en"): BriefingDraft {
     honeypot: "",
     personal: { name: "", role: "owner" },
     business: { name: "", hasName: true, segment: "", stage: "starting", presence: [] },
-    project: { primaryNeed: "visual-identity", motivation: "" },
+    project: {
+      primaryNeed: "visual-identity",
+      motivation: "",
+      desiredChange: "",
+      references: "",
+      targetAudience: "",
+      deliverables: [],
+      aestheticTerritories: [],
+      brandSpectrum: {
+        classicModern: 50,
+        minimalExpressive: 35,
+        warmExclusive: 60,
+        organicTechnical: 50,
+      },
+      avoidElements: "",
+      freeNotes: "",
+    },
     planning: { timeline: "no-specific-date" },
     contact: { email: "", phone: "", preferredChannel: "whatsapp", businessProfile: "" },
     consent: { privacyAccepted: false },
