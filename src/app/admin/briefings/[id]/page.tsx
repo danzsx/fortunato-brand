@@ -33,7 +33,7 @@ function ExtraFields({ raw }: { raw: unknown }) {
   const contact = r.contact || {};
   const spectrum = proj.brandSpectrum as Record<string, number> | undefined;
 
-  const discoveryItems: [string, string][] = [
+  const rawItems: [string, string][] = [
     ["Público & Percepção", print(proj.targetAudience)],
     ["Entregáveis Desejados", print(proj.deliverables)],
     ["Territórios Estéticos", print(proj.aestheticTerritories)],
@@ -47,7 +47,9 @@ function ExtraFields({ raw }: { raw: unknown }) {
     ["Notas livres / Ideias", print(proj.freeNotes)],
     ["Presença atual", print(biz.presence)],
     ["Origem do contato", print(contact.source)],
-  ].filter(([, val]) => val !== "—");
+  ];
+
+  const discoveryItems = rawItems.filter(([, val]) => val !== "—");
 
   if (!discoveryItems.length) return null;
   return (
